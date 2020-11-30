@@ -59,24 +59,21 @@ while True:
 
         letters = ""
         for letter in active_word.find_elements_by_xpath(".//letter"):
-            #try:
-            #    typingTest.send_keys(letter.text)
-            #except Exception:
-            #    pass
             letters += letter.text
         for letter in letters:
-            if random.randint(0, 100) <= 1:
+            if random.randint(1, 100) <= int(os.getenv("MISTAKE_CHANCE_PERCENTAGE")):
                 typingTest.send_keys(random.choice(alphabet_string))
-            elif random.randint(0, 100) < 5:
+            elif random.randint(1, 100) <= int(os.getenv("MISTAKE_AND_CORRECTION_CHANCE_PERCENTAGE")):
                 typingTest.send_keys(random.choice(alphabet_string))
-                time.sleep(random.random() / random.randint(5, 8))
+                time.sleep(random.random() / random.randint(2, 10))
                 typingTest.send_keys(Keys.BACKSPACE)
-                time.sleep(random.random() / random.randint(7, 9))
+                time.sleep(random.random() / random.randint(3, 12))
                 typingTest.send_keys(letter)
             else:
                 typingTest.send_keys(letter)
-            time.sleep(random.random() / random.randint(8, 15))
+            time.sleep(random.random() / random.randint(15, 20))
         typingTest.send_keys(" ")
+        time.sleep(0.02)
     except Exception:
         break
 
@@ -91,5 +88,7 @@ print(f"""
 WPM = {wpm_value}
 ACCURACY = {acc_value}
 """)
+
+time.sleep(10)
 
 driver.close()
